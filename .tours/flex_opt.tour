@@ -1,0 +1,447 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "flex_opt",
+  "steps": [
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "配置对应的arg",
+      "line": 1322
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这个是offload的关键，可以将模型、kvcache进行相应的offload",
+      "line": 1281
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "weight, attn, activations的比例是可以被配置的",
+      "line": 1291
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里也是项目的关键，对weight和cache进行压缩",
+      "line": 1306
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "执行逻辑，这里是核心",
+      "line": 1327
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "构建预热的输入",
+      "line": 1189
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是真实的输入，但好像只会输入prompt_len，不会去固定输入的内容",
+      "line": 1190
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "定义了一个TorchDevice的类，用于处理各种GPU和CPU的Torch数据存放",
+      "line": 1192
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "主要是封装了 `torch.device(name)`",
+      "line": 167
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "DeviceType也是一个专门设计的枚举类",
+      "line": 168
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "可以看到MIX和COMPRESS这些有意思的新类",
+      "line": 47
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "TorchCompressedDevice是专门设计的一个为压缩使用的Device",
+      "line": 29
+    },
+    {
+      "file": "flexllmgen/compression.py",
+      "description": "这里是需要封装一个base device",
+      "line": 24
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "针对CPU类型，还定义了一个global变量：global_cpu_device",
+      "line": 176
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "TorchDisk也是专门设计的类型",
+      "line": 1194
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "Disk类型的设备也需要进行compressed_device",
+      "line": 630
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "",
+      "line": 630
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里是开启了几个thread用于处理？",
+      "line": 640
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "Disk类型的设备的线程函数",
+      "line": 878
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里是从队列中获取四元组，目的就是从src将数据拷贝到dst中",
+      "line": 892
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "针对disk类型，就需要将磁盘上的数据进行内存映射：\n\n内存映像文件是一种将磁盘上的非常大的二进制数据文件当做内存中的数组进行处理的方式。NumPy实现了一个类似于ndarray的memmap对象，它允许将大文件分成小段进行读写，而不是一次性将整个数组读入内存。memmap也拥有跟普通数组一样的方法，因此，基本上只要是能用于ndarray的算法就也能用于memmap。",
+      "line": 868,
+      "selection": {
+        "start": {
+          "line": 868,
+          "character": 33
+        },
+        "end": {
+          "line": 868,
+          "character": 58
+        }
+      }
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里也是支持切片的",
+      "line": 875
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里也是支持切片的",
+      "line": 875
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里也是支持切片的",
+      "line": 875
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里也是支持切片的",
+      "line": 875
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里也是支持切片的",
+      "line": 875
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里也是支持切片的",
+      "line": 875
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "针对CUDA类型的数据，就需要用一个pin住的CPU buf进行中继，首先要把src的数据拷贝到cpu buf中，然后再拷贝到dst上",
+      "line": 898
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "在 Python 中，queue.task_done() 是 queue.Queue 对象的一个方法，用于通知队列管理器队列中的某一项已经被处理完毕。当使用 Queue 对象时，生产者将数据放入队列中后，消费者需要从队列中取出数据并进行处理。当消费者处理完一项数据后，可以使用 queue.task_done() 方法通知队列，这样 Queue 对象就可以知道队列中那一项已经被处理完了",
+      "line": 906
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "执行环境的对象",
+      "line": 1195
+    },
+    {
+      "file": "flexllmgen/utils.py",
+      "description": "当我们将数据类的冻结属性设置为 True 时，会发生以下变化：\n\n- 所有属性会被声明为只读（read-only），不允许修改。\n- 默认的 __init__() 方法会添加一个用于初始化属性的参数。\n- 自动生成的 __repr__() 方法中会包含属性的值，以便更好地表示对象。",
+      "line": 34
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是核心逻辑，用于配置各种offload的比例，还有压缩的比例",
+      "line": 1197
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是opt模型的config字段 ",
+      "line": 1211
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是获取模型的kv cache所占的字节大小",
+      "line": 1212
+    },
+    {
+      "file": "flexllmgen/opt_config.py",
+      "description": "这里以30b举例看下配置的内容，主要的变化就是hidden_layers数量、head数量、hidden_size、input_dim和ffn_embed_dim有些区别",
+      "line": 97
+    },
+    {
+      "file": "flexllmgen/opt_config.py",
+      "description": "这里就是计算cache的字节数，K/V(2) * batchsize * 序列长度 * 隐藏层数量 * 输入维度 * float16(2)",
+      "line": 46
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "hidden size的字节数计算",
+      "line": 1213
+    },
+    {
+      "file": "flexllmgen/opt_config.py",
+      "description": "batchsize * 序列长度 * 输入dim * float16(2)",
+      "line": 49
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "模型对象",
+      "line": 1219
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里的各种layers也只是简单的串行的模块，没有并行的相关配置",
+      "line": 596
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "如果是满载的配置，就要专门去设置一个act_home",
+      "line": 608
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "启动三个Stream，分别用于加载weight、加载cache和写入cache",
+      "line": 618
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这些都是中间张量，估计是为了进行卸载，因此它需要把这些中间张量都声明出来",
+      "line": 622
+    },
+    {
+      "file": "flexllmgen/utils.py",
+      "description": "这些都是python的默认array类型",
+      "line": 188
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "开始初始化所有的参数",
+      "line": 637
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是做了一个简单的array用于存weight的名字？",
+      "line": 798
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "实际初始化",
+      "line": 800
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "缺少模型就要下载",
+      "line": 649
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "每层也都是专门的初始化",
+      "line": 651
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是每层的初始化，区别我觉得主要在于需要显式传入path",
+      "line": 148
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是核心的init函数",
+      "line": 158
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是参数传进来的三个比例",
+      "line": 93
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这段代码是先计算每个weight区间的中点（用中点来代表weight区间），再计算中点和所有weight的百分比",
+      "line": 100
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "先到先得",
+      "line": 86
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "不压缩的逻辑",
+      "line": 111
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "实际上就是确定home类型后，开始进行allocate",
+      "line": 112
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里是针对Disk类型的Torch的申请方式",
+      "line": 656
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里还是从disk中申请一块空间，然后再memmap到内存中",
+      "line": 659
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "实际进行申请TorchTensor",
+      "line": 660
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里也是对Tensor的一个装饰器",
+      "line": 55
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "针对CPU和GPU的tensor的申请逻辑",
+      "line": 184
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "如果是GPU类型的tensor，默认是不会pin的",
+      "line": 188
+    },
+    {
+      "file": "flexllmgen/pytorch_backend.py",
+      "description": "这里是实际从torch上进行创建",
+      "line": 191
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "dummy是fake的意思，如果只是假的参数，就直接申请全1的numpy张量即可",
+      "line": 117
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "压缩的逻辑",
+      "line": 119
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "从宿主设备上的compressed_device上调用allocate",
+      "line": 120
+    },
+    {
+      "file": "flexllmgen/compression.py",
+      "description": "压缩设备都会走到这里来",
+      "line": 32
+    },
+    {
+      "file": "flexllmgen/compression.py",
+      "description": "压缩配置的 num_bits 必须是 4（即每个元素被压缩为 4 位）。数据类型必须是 np.float16（半精度浮点数）。",
+      "line": 34
+    },
+    {
+      "file": "flexllmgen/compression.py",
+      "description": "(shape[group_dim] + group_size - 1) // group_size: 向上取整，确保所有元素都被分组。\n",
+      "line": 39
+    },
+    {
+      "file": "flexllmgen/compression.py",
+      "description": "data_shape :\n\n- 这是压缩后存储实际数据的形状。\n- group_size // 2 是因为每个元素被压缩为 4 位（半字节），所以每 group_size 个元素只需要 group_size // 2 字节。\n- 最终形状会在 group_dim 维度上替换为 num_groups * (group_size // 2)。",
+      "line": 40
+    },
+    {
+      "file": "flexllmgen/compression.py",
+      "description": "scale_shape :\n- 这是存储缩放因子（scale factor）的形状。\n- 每组需要两个缩放因子（可能是最大值和最小值），因此在 group_dim 维度上替换为 (num_groups, 2)。",
+      "line": 42
+    },
+    {
+      "file": "flexllmgen/compression.py",
+      "description": "数据类型为 np.uint8，因为每个元素被压缩为 4 位（半字节），可以用一个字节存储两个元素。因此一个uint8类型的数据可以存两个元素了",
+      "line": 45
+    },
+    {
+      "file": "flexllmgen/compression.py",
+      "description": "分配内存，存储每组的缩放因子。\n",
+      "line": 46
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "将参数输入完之后需要写入weight_home中",
+      "line": 160
+    },
+    {
+      "file": "flexllmgen/utils.py",
+      "description": "写入的逻辑好像也没什么特别的，就是一个setter",
+      "line": 175
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是warmup阶段，先把模型进行一次执行",
+      "line": 1223
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是将输入构建成一个Task",
+      "line": 834
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "针对中间tensors，这里的操作也都是进行clear",
+      "line": 860
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是配置task",
+      "line": 873
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "要对每一层都加上task的标志",
+      "line": 642
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "也只是简单地设置了task",
+      "line": 146
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "这里是初始化kv cache",
+      "line": 876
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "也是每一层进行独立的初始化",
+      "line": 678
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "只有SelfAttn模块才会有kvcache",
+      "line": 321
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "如果不是独占的设备，就要配置为MIX",
+      "line": 329
+    },
+    {
+      "file": "flexllmgen/flex_opt.py",
+      "description": "如果配置了压缩，就要选择压缩设备，且不能是MIX的类型",
+      "line": 333
+    }
+  ],
+  "ref": "main"
+}
